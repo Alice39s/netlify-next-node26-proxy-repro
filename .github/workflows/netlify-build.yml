@@ -1,0 +1,30 @@
+name: netlify build
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Node.js ${{ matrix.node }}${{ matrix.fix && ' + fix.patch' || '' }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - node: 24
+            fix: false
+          - node: 26
+            fix: false
+          - node: 26
+            fix: true
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ matrix.node }}
+      - run: node --version
+      - run: npm install --no-audit --no-fund
+      - if: matrix.fix
+        run: patch -p1 -d node_modules/@netlify/plugin-nextjs < fix.patch
+      - run: npx --yes netlify-cli@27.14.2 build --offline
