@@ -1,0 +1,19 @@
+{
+  "setupTasks": [
+    {
+      "name": "Install dependencies",
+      "command": "npm install --no-audit --no-fund"
+    }
+  ],
+  "tasks": {
+    "netlify-build": {
+      "name": "netlify build",
+      "command": "node --version && npx --yes netlify-cli@27.14.2 build --offline",
+      "runAtStart": true
+    },
+    "netlify-build-fix": {
+      "name": "netlify build with fix.patch",
+      "command": "patch -p1 -d node_modules/@netlify/plugin-nextjs < fix.patch && node --version && npx --yes netlify-cli@27.14.2 build --offline; patch -R -p1 -d node_modules/@netlify/plugin-nextjs < fix.patch"
+    }
+  }
+}

@@ -1,0 +1,4 @@
+{
+  "name": "Node.js 26",
+  "image": "node:26-bookworm"
+}
